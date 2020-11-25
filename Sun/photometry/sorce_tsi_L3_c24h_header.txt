@@ -1,0 +1,134 @@
+; SORCE TIM Total Solar Irradiance
+; 
+; ***SELECTION CRITERIA***
+; data_set_name: SORCE Level 3 Total Solar Irradiance
+; date_range: 20030225 to 20200225
+; cadence: 24 hours
+; version:           18
+; number_of_data:         6210
+; ***END SELECTION CRITERIA***
+;
+; ***DATA DEFINITIONS***, number = 15 [field name, type, format, (Col. #, description)]
+; nominal_date_yyyymmdd                 R8   f12.3 (Column  1: Nominal Data Time, YYYYMMDD)
+; nominal_date_jdn                      R8   f12.3 (Column  2: Nominal Data Time, Julian Day Number)
+; avg_measurement_date_jdn              R8   f15.6 (Column  3: Average Data Time, Julian Day Number)
+; std_dev_measurement_date              R4    f7.4 (Column  4: Stdev of Average Data Time, days, 1 sigma)
+; tsi_1au                               R8   f10.4 (Column  5: Total Solar Irradiance (TSI) at 1-AU, W/m^2)
+; instrument_accuracy_1au               R4   e10.3 (Column  6: Instrument Accuracy in 1-AU TSI, W/m^2, 1 sigma)
+; instrument_precision_1au              R4   e10.3 (Column  7: Instrument Precision in TSI at 1-AU, W/m^2, 1 sigma)
+; solar_standard_deviation_1au          R4   e10.3 (Column  8: Solar Standard Deviation in 1-AU TSI, W/m^2, 1 sigma)
+; measurement_uncertainty_1au           R4   e10.3 (Column  9: Total Uncertainty in TSI at 1-AU, W/m^2, 1 sigma)
+; tsi_true_earth                        R8   f10.4 (Column 10: Total Solar Irradiance at Earth distance, W/m^2)
+; instrument_accuracy_true_earth        R4   e10.3 (Column 11: Instrument Accuracy at Earth distance, W/m^2, 1 sigma)
+; instrument_precision_true_earth       R4   e10.3 (Column 12: Instrument Precision at Earth distance, W/m^2, 1 sigma)
+; solar_standard_deviation_true_earth   R4   e10.3 (Column 13: Solar Standard Deviation in TSI at Earth, W/m^2, 1 sigma)
+; measurement_uncertainty_true_earth    R4   e10.3 (Column 14: Total Uncertainty in TSI at Earth distance, W/m^2, 1 sigma)
+; provisional_flag                      I2      i2 (Column 15: Provisional Flag, 1=provisional data, 0=final data)
+; ***END DATA DEFINITIONS***
+;
+; ***FORTRAN FORMAT SPECIFIER***
+; (f12.3,f12.3,f15.6,f7.4,f10.4,e10.3,e10.3,e10.3,e10.3,f10.4,e10.3,e10.3,e10.3,e10.3,i2)
+; ***END FORTRAN FORMAT SPECIFIER***
+;
+; 
+; Background for the SORCE TIM instrument and TSI measurements
+; 
+; The SORCE Total Irradiance Monitor (TIM) measures the total solar
+; irradiance (TSI), a measure of the absolute intensity of solar radiation
+; integrated over the entire solar disk and the entire solar spectrum.
+; The SORCE Level 3 TSI data products are the daily and 6-hourly mean
+; irradiances, reported at both a mean solar distance of 1 astronomical
+; unit (AU) and at the true Earth-to-Sun distance of date, and zero
+; relative line-of-sight velocity with respect to the Sun. These products
+; respectively indicate emitted solar radiation variability (useful for
+; solar studies) and the solar energy input to the top of the Earth's
+; atmosphere (useful for Earth climate studies).
+; 
+; The TIM instrument is proving very stable with usage and solar exposure,
+; its long-term repeatability having uncertainties estimated to be less
+; than 0.014 W/m^2/yr (10 ppm/yr). Accuracy is estimated to be 0.48 W/m^2
+; (350 ppm) at first light, largely determined by uncertainties in the
+; instrument's linearity. This uncertainty is consistent with the agreement
+; between all four TIM radiometers. Subsequent reported time-dependent increases
+; during the mission are due to estimated uncertainties in applied degradation
+; corrections as well as various operational issues. The lower TSI value reported
+; by the TIM from predecessor TSI instruments has been resolved as being largely
+; due to internal instrument scatter in those prior instrument designs
+; (Kopp & Lean 2011) and has been validated on the new TSI Radiometer Facility
+; (described by Kopp et al. 2007).  The following paragraphs discuss the four
+; different uncertainties reported with the TSI measurements.
+; 
+; INSTRUMENT UNCERTAINTY reflects the instrument's relative standard
+; uncertainty (absolute accuracy) and includes all known uncertainties from
+; ground- and space-based calibrations plus a time-dependent estimate of
+; uncertainty due to degradation. This value is roughly 350 ppm, and varies
+; slightly with measured instrument temperature or the time to the nearest
+; on-orbit calibration. This value is useful when comparing different TSI
+; instruments reporting data from the same time range on an absolute scale.
+; 
+; INSTRUMENT PRECISION reflects the TIM's sensitivity to a change in signal,
+; and is useful for determining relative changes in the TIM TSI due purely
+; to the Sun over time scales of two months or less (so that degradation
+; uncertainty does not have significant effect). This value of 5 ppm is
+; constant, and indicates the instrument's noise level.
+; 
+; High-cadence Level 2 data are averaged (un-weighted mean) to produce daily
+; and 6-hourly averaged Level 3 data. The standard deviation of the Level 2
+; values averaged to produce each Level 3 value is indicative of the solar
+; variability during the reported Level 3 measurement interval, and is
+; called the SOLAR STANDARD DEVIATION. This uncertainty redundantly includes
+; -- but is generally much larger than -- the Instrument Precision. The Solar
+; Standard Deviation is useful for estimating potential variations in TSI
+; within the time range of a Level 3 data value, such as when comparing TIM
+; TSI values with solar images or other TSI instruments reporting data at
+; slightly different times.
+; 
+; MEASUREMENT UNCERTAINTY is the net uncertainty of a reported Level 3 data
+; value, and is the root sum square of Instrument Uncertainty and Solar
+; Standard Deviation. Measurement Uncertainty is the value that should be
+; used when comparing absolute scale TSI data from non-identical time ranges.
+; 
+; RELEASE NOTES for the latest version of TIM Level 3 data may be found at
+; http://lasp.colorado.edu/home/sorce/data/tsi-data/tim-tsi-release-notes/
+; 
+; The 1-AU and at-Earth TIM irradiances are tabulated below ("DATA RECORDS"),
+; with each row giving the nominal and measurement dates, the reported
+; irradiances, and estimated uncertainties. Each field (column) is defined
+; and described in the "DATA DEFINITIONS" section above. An IDL file reader
+; (read_lasp_ascii_file.pro) is available which will read this file and
+; return an array of structures whose field names and types are taken from
+; the "DATA DEFINITIONS" section.
+; 
+; Details of the TIM design and calibrations are given in:
+; 
+; Kopp, G. and Lawrence, G., "The Total Irradiance Monitor (TIM): Instrument
+; Design," Solar Physics, 230, 1, Aug. 2005, pp. 91-109.
+; 
+; Kopp, G., Heuerman, K., and Lawrence, G., "The Total Irradiance Monitor
+; (TIM): Instrument Calibration," Solar Physics, 230, 1, Aug. 2005,
+; pp. 111-127.
+; 
+; Citing the daily data:
+; 
+; Kopp, G. (2019), SORCE Level 3 Total Solar Irradiance Daily Means, version 018,
+; Greenbelt, MD, USA: NASA Goddard Earth Science Data and Information Services Center (GES DISC),
+; Accessed <Enter User Data Access Date> at doi:10.5067/D959YZ53XQ4C
+; 
+; Citing the 6-hourly data:
+; 
+; Kopp, G. (2019), SORCE Level 3 Total Solar Irradiance 6-Hourly Means, version 018,
+; Greenbelt, MD, USA: NASA Goddard Earth Science Data and Information Services Center (GES DISC),
+; Accessed <Enter User Data Access Date> at doi:10.5067/BSST2M83Q1YG
+; 
+; This data file and other SORCE data products may be obtained from:
+; http://lasp.colorado.edu/home/sorce/data/
+; 
+; For more information on the SORCE TIM instrument and data, see:
+; http://lasp.colorado.edu/home/sorce/data/tsi-data/
+; 
+; For news and general information about the SORCE mission, see:
+; http://lasp.colorado.edu/home/sorce/
+;
+; Columns:
+;     1           2            3          4        5         6         7         8         9        10        11        12        13        14    15
+; ***DATA RECORDS***, number =      6210
